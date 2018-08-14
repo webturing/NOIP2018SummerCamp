@@ -1,44 +1,29 @@
 #include <bits/stdc++.h>
 using namespace std;
 struct Heap {
-  int capacity = 2;
-  int *data = new int[capacity];
-  Heap() { data[0] = 0; }
+  int _size;
+  int *data;
+  Heap(int _size = 10) : _size(_size) {
+    data = new int[_size];
+    data[0] = 0;
+  }
+  ~Heap() { delete[] data; }
   friend ostream &operator<<(ostream &os, Heap &h) {
-    // os << h.data[0] << ":";
     for (int i = 1; i <= h.size(); i++) {
       os << h.data[i] << " ";
     }
     return os;
   }
-  inline int &size() { return data[0]; }
-  inline bool empty() { return data[0] == 0; }
-  inline int left(int i) {
-    if (2 * i <= size())
-      return 2 * i;
-    else
-      return -1;
-  }
-  inline int right(int i) {
-    if (2 * i + 1 <= size())
-      return 2 * i + 1;
-    else
-      return -1;
-  }
-  inline int parent(int i) {
-    if (i > 1) return data[i >> 1];
-    return -1;
-  }
-  int top() {
-    if (data[0] > 0)
-      return data[1];
-    else
-      return -1;
-  }
+  inline int &size() const { return data[0]; }
+  inline bool empty() const { return data[0] == 0; }
+  inline int left(int i) const { return 2 * i <= size() ? 2 * i : -1; }
+  inline int right(int i) const { return 2 * i + 1 <= size() ? 2 * i + 1 : -1; }
+  inline int parent(int i) const { return i > 1 ? data[i >> 1] : 1; }
+  inline int top() const { return size() ? data[1] : -1; }
   void push(int x) {
-    if (size() == capacity) {
-      capacity <<= 1;
-      int *data2 = new int[capacity];
+    if (size() == _size) {
+      _size <<= 1;
+      int *data2 = new int[_size];
       for (int i = 0; i <= size(); i++) data2[i] = data[i];
       delete[] data;
       data = data2;
